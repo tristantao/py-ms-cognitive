@@ -1,0 +1,21 @@
+*.py[cod]
+*.swp
+
+# Packages
+*.egg
+*.egg-info
+dist
+temp_dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib64
+
+#sensitive info in this driver
+driver.py
+secrets.cfg
