@@ -16,6 +16,36 @@ class PyMsCognitiveSearch(object):
         self.query = query
         self.QUERY_URL = query_url
 
+    def get_json_results(self, response):
+        '''
+        Parses the request result and returns the JSON object. Handles all errors.
+        '''
+        try:
+            # return the proper JSON object, or error code if request didn't go through.
+            json_results = response.json()
+            if response.status_code in [401, 403]: #401 is invalid key, 403 is out of monthly quota.
+                raise PyMsCognitiveWebSearchException("CODE {code}: {message}".format(code=response.status_code,message=json_results["message"]) )
+            elif response.status_code in [429]:
+                message = json_results['message']
+                try:
+                    # extract time out seconds from response
+                    timeout = int(re.search('in (.+?) seconds', message).group(1)) + 1
+                    print ("CODE 429, sleeping for {timeout} seconds").format(timeout=str(timeout))
+                    time.sleep(timeout)
+                except (AttributeError, ValueError) as e:
+                    if not self.safe:
+                        raise PyMsCognitiveWebSearchException("CODE 429. Failed to auto-sleep: {message}".format(code=response.status_code,message=json_results["message"]) )
+                    else:
+                        print ("CODE 429. Failed to auto-sleep: {message}. Trying again in 5 seconds.".format(code=response.status_code,message=json_results["message"]))
+                        time.sleep(5)
+        except ValueError as vE:
+            if not self.safe:
+                raise PyMsCognitiveWebSearchException("Request returned with code %s, error msg: %s" % (r.status_code, r.text))
+            else:
+                print ("[ERROR] Request returned with code %s, error msg: %s. \nContinuing in 5 seconds." % (r.status_code, r.text))
+                time.sleep(5)
+        return json_results
+
     def search(self, limit=50, format='json'):
         ''' Returns the result list, and also the uri for next page (returned_list, next_uri) '''
         return self._search(limit, format)
@@ -64,30 +94,7 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
         }
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }
         response = requests.get(self.QUERY_URL, params=payload, headers=headers)
-        try:
-            # return the proper JSON object, or error code if request didn't go through.
-            json_results = response.json()
-            if response.status_code in [401, 403]: #401 is invalid key, 403 is out of monthly quota.
-                raise PyMsCognitiveWebSearchException("CODE {code}: {message}".format(code=response.status_code,message=json_results["message"]) )
-            elif response.status_code in [429]:
-                message = json_results['message']
-                try:
-                    # extract time out seconds from response
-                    timeout = int(re.search('in (.+?) seconds', message).group(1)) + 1
-                    print ("CODE 429, sleeping for {timeout} seconds").format(timeout=str(timeout))
-                    time.sleep(timeout)
-                except (AttributeError, ValueError) as e:
-                    if not self.safe:
-                        raise PyMsCognitiveWebSearchException("CODE 429. Failed to auto-sleep: {message}".format(code=response.status_code,message=json_results["message"]) )
-                    else:
-                        print ("CODE 429. Failed to auto-sleep: {message}. Trying again in 5 seconds.".format(code=response.status_code,message=json_results["message"]))
-                        time.sleep(5)
-        except ValueError as vE:
-            if not self.safe:
-                raise PyMsCognitiveWebSearchException("Request returned with code %s, error msg: %s" % (r.status_code, r.text))
-            else:
-                print ("[ERROR] Request returned with code %s, error msg: %s. \nContinuing in 5 seconds." % (r.status_code, r.text))
-                time.sleep(5)
+        json_results = self.get_json_results(response)
         packaged_results = [WebResult(single_result_json) for single_result_json in json_results["webPages"]["value"]]
         self.current_offset += min(50, limit, len(packaged_results))
         return packaged_results
