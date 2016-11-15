@@ -63,6 +63,8 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
           #'safesearch' : 'Moderate', #optional
         }
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }
+        if self.safe:
+            QueryChecker.check_web_params(payload, headers)
         response = requests.get(self.QUERY_URL, params=payload, headers=headers)
         try:
             # return the proper JSON object, or error code if request didn't go through.
@@ -118,3 +120,45 @@ class WebResult(object):
         self.description = result['snippet']
 
 
+class QueryChecker():
+    """
+    Isolated human-error-checker class.
+    All methods are static and do not modify state.
+    if/else mess below forgoes optimization in favor of clarity.
+    """
+    @staticmethod
+    def check_web_params(query_dict, header_dict):
+        responseFilters = ('Computation', 'Images', 'News', 'RelatedSearches', 'SpellSuggestions', 'TimeZone', 'Videos', 'Webpages')
+
+        if 'cc' in query_dict.keys():
+            if query_dict['cc'] and not header_dict['Accept-Language']:
+                raise AssertionError('Attempt to use country-code without specifying language.')
+            if query_dict['mkt']:
+                raise ReferenceError('cc and mkt cannot be specified simultaneously')
+        if 'count' in query_dict.keys():
+            if int(query_dict['count']) >= 51 or int(query_dict['count']) < 0:
+                raise ValueError('Count specified out of range. 50 max objects returned.')
+        if 'freshness' in query_dict.keys():
+            if query_dict['freshness'] not in ('Day', 'Week', 'Month'):
+                raise ValueError('Freshness must be == Day, Week, or Month. Assume Case-Sensitive.')
+        if 'offset' in query_dict.keys():
+            if int(query_dict['offset']) < 0:
+                raise ValueError('Offset cannot be negative.')
+        if 'responseFilter' in query_dict.keys():
+            if query_dict['responseFilter'] not in responseFilters:
+                raise ValueError('Improper response filter.')
+        if 'safeSearch' in query_dict.keys():
+            if query_dict['safeSearch'] not in ('Off', 'Moderate', 'Strict'):
+                raise ValueError('safeSearch setting must be Off, Moderate, or Strict. Assume Case-Sensitive.')
+            if 'X-Search-ClientIP' in query_dict.keys():
+                raw_input('You have specified both an X-Search-ClientIP header and safesearch setting\nplease note: header takes precedence')
+        if 'setLang' in query_dict.keys():
+            if header_dict['Accept-Language']:
+                raise AssertionError('Attempt to use both language header and query param.')
+        if 'textDecorations' in query_dict.keys():
+            if query_dict['textDecorations'].lower() not in ('true', 'false'):
+                raise TypeError('textDecorations is type bool')
+        if 'textFormat' in query_dict.keys():
+            if query_dict['textFormat'] not in ('Raw', 'HTML'):
+                raise ValueError('textFormat must be == Raw or HTML. Assume Case-Sensitive.')
+        return True
