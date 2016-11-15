@@ -1,4 +1,4 @@
-# py-microsoft-cognitive-services
+# py-ms-cognitive
 Thin wrapper for the Microsoft Cognitive Services
 
 A continuation of: https://github.com/tristantao/py-bing-search
