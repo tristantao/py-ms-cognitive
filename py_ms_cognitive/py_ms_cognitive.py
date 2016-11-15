@@ -67,7 +67,7 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
         try:
             # return the proper JSON object, or error code if request didn't go through.
             json_results = response.json()
-            if response.status_code in [401, 403]:
+            if response.status_code in [401, 403]: #401 is invalid key, 403 is out of monthly quota.
                 raise PyMsCognitiveWebSearchException("CODE {code}: {message}".format(code=response.status_code,message=json_results["message"]) )
             elif response.status_code in [429]:
                 message = json_results['message']
