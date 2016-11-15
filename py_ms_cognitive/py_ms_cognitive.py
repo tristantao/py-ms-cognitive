@@ -115,16 +115,15 @@ class WebResult(object):
 
     def __init__(self, result):
         self.json = result
-        self.url = result['url']
-        self.display_url = result['displayUrl']
-        self.name = result['name']
-        self.snippet = result['snippet']
-        self.id = result['id']
+        self.url = result.get('url')
+        self.display_url = result.get('displayUrl')
+        self.name = result.get('name')
+        self.snippet = result.get('snippet')
+        self.id = result.get('id')
 
         #maintain compatibility
-        self.title = result['name']
-        self.description = result['snippet']
-
+        self.title = result.get('name')
+        self.description = result.get('snippet')
 
 ##
 ##
