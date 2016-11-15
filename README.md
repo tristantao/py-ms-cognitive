@@ -1,8 +1,7 @@
 # py-ms-cognitive
 Thin wrapper for the Microsoft Cognitive Services
 
-A continuation of: __[PyBingSearch](https://github.com/tristantao/py-bing-search)__
-
+A continuation of __[PyBingSearch](https://github.com/tristantao/py-bing-search)__ which will no longer be updated as of Nov 14th 2016.
 
 Intro
 =====
