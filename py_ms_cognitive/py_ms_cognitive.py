@@ -109,8 +109,12 @@ class WebResult(object):
     def __init__(self, result):
         self.url = result['url']
         self.display_url = result['displayUrl']
+        self.name = result['name']
+        self.snippet = result['snippet']
+        self.id = result['id']
+
+        #maintain compatibility
         self.title = result['name']
         self.description = result['snippet']
-        self.id = result['id']
 
 
