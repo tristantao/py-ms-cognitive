@@ -30,15 +30,47 @@ Usage
 
 Remember to set the `API_KEY` as your own.
 
+###Searches [Web / Image / News / Video]
+
 ####For Web Results:
 
 ```py
 >>> from py_ms_cognitive import PyMsCognitiveWebSearch
 >>> search_term = "Python Software Foundation"
 >>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term)
->>> first_fifty_result= search_service.search(limit=50, format='json') #1-50
->>> second_fifty_result= search_service.search(limit=50, format='json') #51-100
+>>> first_fifty_result = search_service.search(limit=50, format='json') #1-50
+>>> second_fifty_resul t= search_service.search(limit=50, format='json') #51-100
 
 >>> print (second_fifty_result[0].snippet)
     u'Python Software Foundation Home Page. The mission of the Python Software Foundation is to promote, protect, and advance the Python programming language, and to ...'
+>>> print (first_fifty_result[0].__dict__.keys()) #see what variables are available.
+['name', 'display_url', 'url', 'title', 'snippet', 'json', 'id', 'description']
+    
+    # To get individual result json:
+>>> print (second_fifty_result[0].json)
+...
+   
+    # To get the whole response json from the MOST RECENT response
+    # (which will hold 50 individual responses depending on limit set):
+>>> print (search_service.most_recent_json)
+...
 ```
+
+####For Image Results:
+
+```py
+>>> from py_ms_cognitive import PyMsCognitiveImageSearch
+>>> search_term = "puppies"
+>>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term)
+>>> first_fifty_result = search_service.search(limit=50, format='json') #1-50
+>>> second_fifty_result = search_service.search(limit=50, format='json') #51-100
+
+>>> print (second_fifty_result[0].name)
+    u'So cute - Puppies Wallpaper (14749028) - Fanpop'
+>>> print (first_fifty_result[0].__dict__.keys()) #see what variables are available.
+['name', 'web_search_url', 'content_size', 'image_insights_token', 'content_url', 'image_id', 'json', 'host_page_url', 'thumbnail_url']
+```
+
+The package also support Video (__PyMsCognitiveImageSearch__), and News (__PyMsCognitiveNewsSearch__). Simply replace the imports and they'll work the same.
+
+#### Additional support on the way.
