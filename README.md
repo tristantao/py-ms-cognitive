@@ -71,6 +71,6 @@ Remember to set the `API_KEY` as your own.
 ['name', 'web_search_url', 'content_size', 'image_insights_token', 'content_url', 'image_id', 'json', 'host_page_url', 'thumbnail_url']
 ```
 
-The package also support Video (__PyMsCognitiveImageSearch__), and News (__PyMsCognitiveNewsSearch__). Simply replace the imports and they'll work the same.
+The package also support Video (__PyMsCognitiveVideoSearch__), and News (__PyMsCognitiveNewsSearch__). Simply replace the imports and they'll work the same.
 
 #### Additional support on the way.
