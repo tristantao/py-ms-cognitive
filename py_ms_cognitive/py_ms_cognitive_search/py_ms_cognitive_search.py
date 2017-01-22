@@ -1,9 +1,24 @@
-import requests, requests.utils
-import time, re
-import pdb
+#!/usr/bin/env python
+# encoding: utf-8
+
+"""
+Main class for doing actual searches.
+"""
+
+import time
+import re
+
+
+__author__ = 'tristantao (https://github.com/tristantao)'
+
 
 class PyMsCognitiveException(Exception):
     pass
+
+
+class PyMsCognitiveWebSearchException(Exception):
+    pass
+
 
 class PyMsCognitiveSearch(object):
     """
@@ -65,6 +80,7 @@ class PyMsCognitiveSearch(object):
             limit = limit - len(more_results)
             time.sleep(1)
         return results
+
 
 class QueryChecker():
     """
