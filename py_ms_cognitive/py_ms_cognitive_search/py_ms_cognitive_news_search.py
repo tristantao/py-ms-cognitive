@@ -1,5 +1,5 @@
 import requests, requests.utils
-from py_ms_cognitive_search import PyMsCognitiveSearch
+from .py_ms_cognitive_search import PyMsCognitiveSearch
 
 ##
 ##
