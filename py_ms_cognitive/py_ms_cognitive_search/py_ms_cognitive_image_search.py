@@ -22,9 +22,10 @@ class PyMsCognitiveImageSearch(PyMsCognitiveSearch):
         '''
         Returns a list of result objects, with the url for the next page MsCognitive search url.
         '''
+        limit = min(limit, self.MAX_SEARCH_PER_QUERY)
         payload = {
           'q' : self.query,
-          'count' : '50', #currently 50 is max per search.
+          'count' : limit, #currently 50 is max per search.
           'offset': self.current_offset,
           #'mkt' : 'en-us', #optional
           #'safesearch' : 'Moderate', #optional
