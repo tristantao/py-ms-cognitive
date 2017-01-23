@@ -1,6 +1,5 @@
 import requests, requests.utils
 from .py_ms_cognitive_search import PyMsCognitiveSearch
-import pdb
 
 ##
 ##
@@ -36,7 +35,6 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
             QueryChecker.check_web_params(payload, headers)
         response = requests.get(self.QUERY_URL, params=payload, headers=headers)
         json_results = self.get_json_results(response)
-        pdb.set_trace()
         packaged_results = [WebResult(single_result_json) for single_result_json in json_results["webPages"]["value"]]
         self.current_offset += min(50, limit, len(packaged_results))
         return packaged_results
