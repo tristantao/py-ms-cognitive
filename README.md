@@ -61,7 +61,7 @@ Remember to set the `API_KEY` as your own.
 ```py
 >>> from py_ms_cognitive import PyMsCognitiveImageSearch
 >>> search_term = "puppies"
->>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term)
+>>> search_service = PyMsCognitiveImageSearch('API_KEY', search_term)
 >>> first_fifty_result = search_service.search(limit=50, format='json') #1-50
 >>> second_fifty_result = search_service.search(limit=50, format='json') #51-100
 
@@ -72,5 +72,22 @@ Remember to set the `API_KEY` as your own.
 ```
 
 The package also support Video (__PyMsCognitiveVideoSearch__), and News (__PyMsCognitiveNewsSearch__). Simply replace the imports and they'll work the same.
+
+## Searching for a specific number of results.
+
+You secan also run __*search_all*__ to keep searching until it fills your required quota. Note that this will make an unpredictable number of api calls (hence drains your credits).
+
+```py
+>>> from py_ms_cognitive import PyMsCognitiveWebSearch
+>>> search_term = "puppies"
+>>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term)
+>>> result_list = bing_web.search_all(limit=130) #will return result 1 - 130 
+#(around 130 results, sometimes more)
+>>> result_list = bing_web.search_all(limit=130, format='json') #will return result 131 to 260 
+# sometimes a bit different, but roughly the number.
+```
+
+__*search_all()*__ is available in all PyBing*Search classes.
+
 
 #### Additional support on the way.
