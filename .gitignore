@@ -15,6 +15,7 @@ sdist
 develop-eggs
 .installed.cfg
 lib64
+dist_backup
 
 #sensitive info in this driver
 driver.py
