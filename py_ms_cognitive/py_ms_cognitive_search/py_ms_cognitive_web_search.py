@@ -13,7 +13,8 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
     SEARCH_WEB_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/search'
 
     def __init__(self, api_key, query, safe=False, custom_params=''):
-        query_url = self.SEARCH_WEB_BASE + custom_params
+        query_url = self.SEARCH_WEB_BASE
+        self.custom_params_hash = dict(item.split("=") for item in custom_params.split("&")[1:])
         PyMsCognitiveSearch.__init__(self, api_key, query, query_url, safe=safe)
 
     def _search(self, limit, format):
@@ -28,6 +29,7 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
           #'mkt' : 'en-us', #optional
           #'safesearch' : 'Moderate', #optional
         }
+        payload.update(self.custom_params_hash)
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }
         if self.safe:
             QueryChecker.check_web_params(payload, headers)
