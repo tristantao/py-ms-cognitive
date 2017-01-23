@@ -33,7 +33,6 @@ class TestPyMsCognitiveWebSearch(TestCase):
     def test_search_all(self):
         web_bing = PyMsCognitiveWebSearch(SECRET_KEY, "Python Software Foundation")
         result_one = web_bing.search_all(quota=60)
-        print len(result_one)
         self.assertTrue(len(result_one) == 60)
         self.assertTrue("python" in result_one[0].name.lower())
 
@@ -53,7 +52,6 @@ class TestPyMsCognitiveImageSearch(TestCase):
     def test_search_all(self):
         web_bing = PyMsCognitiveImageSearch(SECRET_KEY, "Python Software Foundation")
         result_one = web_bing.search_all(quota=60)
-        print len(result_one)
         self.assertTrue(len(result_one) == 60)
         self.assertTrue(len(result_one) == 60)
         self.assertTrue("python" in result_one[0].name.lower())
