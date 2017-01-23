@@ -30,6 +30,7 @@ class PyMsCognitiveSearch(object):
         self.current_offset = 0
         self.query = query
         self.QUERY_URL = query_url
+        self.MAX_SEARCH_PER_QUERY = 50
         self.most_recent_json = None
 
     def get_json_results(self, response):
@@ -67,18 +68,22 @@ class PyMsCognitiveSearch(object):
         ''' Returns the result list, and also the uri for next page (returned_list, next_uri) '''
         return self._search(limit, format)
 
-    def search_all(self, limit=50, format='json'):
-        ''' Returns a single list containing up to 'limit' Result objects'''
-        desired_limit = limit
-        results = self._search(limit, format)
-        limit = limit - len(results)
-        while len(results) < desired_limit:
-            more_results = self._search(limit, format)
+    def search_all(self, quota=50, format='json'):
+        '''
+        Returns a single list containing up to 'limit' Result objects
+        Will keep requesting until quota is met
+        Will also truncate extra results to return exactly the given quota
+        '''
+        quota_left = quota
+        results = []
+        while quota_left > 0:
+            more_results = self._search(quota_left, format)
             if not more_results:
                 break
             results += more_results
-            limit = limit - len(more_results)
+            quota_left = quota_left - len(more_results)
             time.sleep(1)
+        results = results[0:quota]
         return results
 
 
