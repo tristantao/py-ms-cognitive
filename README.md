@@ -55,7 +55,7 @@ Remember to set the `API_KEY` as your own.
 >>> print (search_service.most_recent_json)
 ...
 ```
-__*limit*__ parameter controls how many, up to 50. if you need more than 50, call __*search_all()*__ below.
+__*limit*__ parameter controls how many results to return in this single query, up to __*50*__. if you need more than 50, call __*search_all()*__ below, and use the __*quota*__ parameter to specify how many results.
 
 ####For Image Results:
 
@@ -88,9 +88,13 @@ You secan also run __*search_all*__ to keep searching until it fills your requir
 # sometimes a bit different, but roughly the number. Read below for the details.
 ```
 Sometimes microsoft returns 36 results when you query for 30 (just an inexact number). This means py-ms-cognitive will truncate some results. Here's an example:
+
+```
 result_list = bing_web.search_all(quota=80) 
-This will likely be forced to run twice, first time getting __*50*__ from Micorosoft, and perhaps second time returning __*34*__ for some reason. py-ms-cognitive will truncate and return 80. But it also received __*83*__ in combined results. That means the next time you run the command from the same instance:
-result_list = bing_web.search(quota=20),
+```
+
+This will likely be forced to run twice, first time getting __*50*__ (the max) from Micorosoft, and perhaps second time returning __*33*__ for some reason. py-ms-cognitive will truncate and return 80. But it also received __*83*__ in combined results. That means the next time you run the command from the same instance:
+result_list = bing_web.search(limit=20),
 It won't return result number __*80-100*__, but rather result number __*83 - 103*__. But you would have no way of knowing this.
 
 
