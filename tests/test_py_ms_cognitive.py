@@ -50,6 +50,18 @@ class TestPyMsCognitiveWebSearch(TestCase):
         web_bing = PyMsCognitiveWebSearch(SECRET_KEY, non_existing_result)
         self.assertTrue([] == web_bing.search())
 
+class TestSafeMode(TestCase):
+
+    def tearDown(self):
+        '''To not overload API calls'''
+        time.sleep(0.75)
+
+    def test_can_search(self):
+        web_bing = PyMsCognitiveWebSearch(SECRET_KEY, "Python Software Foundation", safe=True)
+        result_one = web_bing.search(limit=50)
+        self.assertTrue(len(result_one) == 50)
+        self.assertTrue("python" in result_one[0].name.lower())
+
 # Image Tests
 class TestPyMsCognitiveImageSearch(TestCase):
 
