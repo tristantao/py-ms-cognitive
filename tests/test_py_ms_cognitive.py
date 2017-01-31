@@ -7,15 +7,22 @@ from py_ms_cognitive import PyMsCognitiveImageSearch
 from py_ms_cognitive import PyMsCognitiveVideoSearch
 from py_ms_cognitive import PyMsCognitiveNewsSearch
 
+
 def grab_search_secret():
     config = ConfigParser.ConfigParser()
-    config.readfp(open('tests/secrets.cfg'))
-    return config.get('secret', 'search_secret')
+    try:
+        config.readfp(open('tests/secrets.cfg'))
+        secret = config.get('secret', None)
+        if secret is None:
+            return os.environ.get("PY_MS_COGNITIVE_SECRET", "search_secret")
+        return secret
+    except IOError:
+        return os.environ.get("PY_MS_COGNITIVE_SECRET", "search_secret")
 
 def setUpModule():
     global SECRET_KEY
     SECRET_KEY = grab_search_secret()
-    print('Setting Up Test')
+    print('Setting Up Test.')
 
 class TestPyMsCognitiveWebSearch(TestCase):
 
@@ -28,13 +35,25 @@ class TestPyMsCognitiveWebSearch(TestCase):
         result_one = web_bing.search(limit=50)
         self.assertTrue(len(result_one) == 50)
         self.assertTrue("python" in result_one[0].name.lower())
-        time.sleep
+        time.sleep(0.5)
 
     def test_search_all(self):
         web_bing = PyMsCognitiveWebSearch(SECRET_KEY, "Python Software Foundation")
         result_one = web_bing.search_all(quota=60)
         self.assertTrue(len(result_one) == 60)
         self.assertTrue("python" in result_one[0].name.lower())
+
+    def test_empty_response(self):
+        '''
+        This test was written before adding the handling to ensure the root cause of the error was indeed
+        a query without results.
+
+        This test is suppose to fail once the change is done.
+        :return:
+        '''
+        non_existing_result = u'youwillmostdeffinitlynotfindthisveryweirdandlongstringopnanysitewhatsoever123'
+        web_bing = PyMsCognitiveWebSearch(SECRET_KEY, non_existing_result)
+        self.assertRaises(KeyError, web_bing.search)
 
 # Image Tests
 class TestPyMsCognitiveImageSearch(TestCase):
