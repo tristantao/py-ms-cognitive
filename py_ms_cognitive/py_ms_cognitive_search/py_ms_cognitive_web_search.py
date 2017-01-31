@@ -35,7 +35,7 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
             QueryChecker.check_web_params(payload, headers)
         response = requests.get(self.QUERY_URL, params=payload, headers=headers)
         json_results = self.get_json_results(response)
-        packaged_results = [WebResult(single_result_json) for single_result_json in json_results["webPages"]["value"]]
+        packaged_results = [WebResult(single_result_json) for single_result_json in json_results.get("webPages", {}).get("value", [])]
         self.current_offset += min(50, limit, len(packaged_results))
         return packaged_results
 
@@ -64,3 +64,5 @@ class WebResult(object):
         #maintain compatibility
         self.title = result.get('name')
         self.description = result.get('snippet')
+
+        self.deep_links = result.get('deepLinks')
