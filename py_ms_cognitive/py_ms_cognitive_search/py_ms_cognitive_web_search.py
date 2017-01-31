@@ -64,3 +64,5 @@ class WebResult(object):
         #maintain compatibility
         self.title = result.get('name')
         self.description = result.get('snippet')
+
+        self.deepLinks = result.get('deepLinks')
