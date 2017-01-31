@@ -1,5 +1,6 @@
 import requests, requests.utils
 from .py_ms_cognitive_search import PyMsCognitiveSearch
+from .py_ms_cognitive_search import QueryChecker
 
 ##
 ##
@@ -14,9 +15,9 @@ class PyMsCognitiveNewsSearch(PyMsCognitiveSearch):
 
     SEARCH_NEWS_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/news/search'
 
-    def __init__(self, api_key, query, safe=False, custom_params=''):
+    def __init__(self, api_key, query, silent_fail=False, custom_params=''):
         query_url = self.SEARCH_NEWS_BASE + custom_params
-        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, safe=safe)
+        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, silent_fail=silent_fail)
 
     def _search(self, limit, format):
         '''
@@ -29,6 +30,8 @@ class PyMsCognitiveNewsSearch(PyMsCognitiveSearch):
           'offset': self.current_offset,
         }
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }
+        if not self.silent_fail:
+            QueryChecker.check_web_params(payload, headers)
         response = requests.get(self.QUERY_URL, params=payload, headers=headers)
         json_results = self.get_json_results(response)
 

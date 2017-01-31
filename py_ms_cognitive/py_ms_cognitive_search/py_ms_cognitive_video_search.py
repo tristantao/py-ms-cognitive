@@ -1,5 +1,6 @@
 import requests, requests.utils
 from .py_ms_cognitive_search import PyMsCognitiveSearch
+from .py_ms_cognitive_search import QueryChecker
 
 ##
 ##
@@ -14,9 +15,9 @@ class PyMsCognitiveVideoSearch(PyMsCognitiveSearch):
 
     SEARCH_VIDEO_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/videos/search'
 
-    def __init__(self, api_key, query, safe=False, custom_params=''):
+    def __init__(self, api_key, query, silent_fail=False, custom_params=''):
         query_url = self.SEARCH_VIDEO_BASE + custom_params
-        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, safe=safe)
+        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, silent_fail=silent_fail)
 
     def _search(self, limit, format):
         '''

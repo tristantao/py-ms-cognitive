@@ -24,9 +24,9 @@ class PyMsCognitiveSearch(object):
     """
     Shell class for the individual searches
     """
-    def __init__(self, api_key, query, query_url, safe=False):
+    def __init__(self, api_key, query, query_url, silent_fail=False):
         self.api_key = api_key
-        self.safe = safe
+        self.silent_fail = silent_fail
         self.current_offset = 0
         self.query = query
         self.QUERY_URL = query_url
@@ -51,13 +51,13 @@ class PyMsCognitiveSearch(object):
                     print ("CODE 429, sleeping for {timeout} seconds").format(timeout=str(timeout))
                     time.sleep(timeout)
                 except (AttributeError, ValueError) as e:
-                    if not self.safe:
+                    if not self.silent_fail:
                         raise PyMsCognitiveWebSearchException("CODE 429. Failed to auto-sleep: {message}".format(code=response.status_code,message=json_results["message"]) )
                     else:
                         print ("CODE 429. Failed to auto-sleep: {message}. Trying again in 5 seconds.".format(code=response.status_code,message=json_results["message"]))
                         time.sleep(5)
         except ValueError as vE:
-            if not self.safe:
+            if not self.silent_fail:
                 raise PyMsCognitiveWebSearchException("Request returned with code %s, error msg: %s" % (r.status_code, r.text))
             else:
                 print ("[ERROR] Request returned with code %s, error msg: %s. \nContinuing in 5 seconds." % (r.status_code, r.text))
