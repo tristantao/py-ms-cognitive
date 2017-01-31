@@ -111,4 +111,19 @@ Custom parameters can be added via the __*custom_params*__ parameter:
 ```
 *Note that offset (among other query parameters) are used internally, and your custom param will overwrite them*. This means in the above example, no matter how many times you call __*search()*__, it'll always return result # __*10-60*__, since it'll honor the offset request in __*custom_params*__.
 
+## silent_fail mode
+you can enable *__silent_fail__* (off by default) by:
+
+```py
+>>> from py_ms_cognitive import PyMsCognitiveWebSearch
+>>> search_term = "puppies"
+>>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term, silent_fail=True)
+...
+```
+
+*__silent_fail__* mode will do the following:
+ * Bad parameters will not be checked
+ * Any error will only print out and sleep for a few seconds to retry.
+ * It will (to its best ability) not raise any exceptions.
+
 #### Additional support on the way.
