@@ -12,7 +12,7 @@ def grab_search_secret():
     config = ConfigParser.ConfigParser()
     try:
         config.readfp(open('tests/secrets.cfg'))
-        secret = config.get('secret', None)
+        secret = config.get('secret', 'search_secret')
         if secret is None:
             return os.environ.get("PY_MS_COGNITIVE_SECRET", "search_secret")
         return secret
