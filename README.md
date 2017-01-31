@@ -1,5 +1,5 @@
 # py-ms-cognitive
-Thin wrapper for the Microsoft Cognitive Services (originally called Project Oxford with an endpoint at projectocford.ai). If you have additional support you want, please make an issue.
+Thin wrapper for the Microsoft Cognitive Services (originally called Project Oxford with an endpoint at projectoxford.ai). If you have additional support you want, please make an issue.
 
 A continuation of __[PyBingSearch](https://github.com/tristantao/py-bing-search)__ which will no longer be updated as of Nov 14th 2016.
 
