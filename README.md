@@ -1,5 +1,5 @@
 # py-ms-cognitive
-Thin wrapper for the Microsoft Cognitive Services
+Thin wrapper for the Microsoft Cognitive Services. If you have additional support you want, please make an issue.
 
 A continuation of __[PyBingSearch](https://github.com/tristantao/py-bing-search)__ which will no longer be updated as of Nov 14th 2016.
 
@@ -126,4 +126,4 @@ you can enable *__silent_fail__* (off by default) by:
  * Any error will only print out and sleep for a few seconds to retry.
  * It will (to its best ability) not raise any exceptions.
 
-#### Additional support on the way.
+#### Additional support on the way. If you have additional support you want, please make an issue.
