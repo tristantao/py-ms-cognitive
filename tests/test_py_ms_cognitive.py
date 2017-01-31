@@ -44,15 +44,11 @@ class TestPyMsCognitiveWebSearch(TestCase):
 
     def test_empty_response(self):
         '''
-        This test was written before adding the handling to ensure the root cause of the error was indeed
-        a query without results.
-
-        This test is suppose to fail once the change is done.
-        :return:
+        This test checks that searching for a non-existent keyword will not error out.
         '''
         non_existing_result = u'youwillmostdeffinitlynotfindthisveryweirdandlongstringopnanysitewhatsoever123'
         web_bing = PyMsCognitiveWebSearch(SECRET_KEY, non_existing_result)
-        self.assertRaises(KeyError, web_bing.search)
+        self.assertTrue([] == web_bing.search())
 
 # Image Tests
 class TestPyMsCognitiveImageSearch(TestCase):
