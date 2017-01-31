@@ -26,8 +26,6 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
           'q' : self.query,
           'count' : limit, #currently 50 is max per search.
           'offset': self.current_offset,
-          #'mkt' : 'en-us', #optional
-          #'safesearch' : 'Moderate', #optional
         }
         payload.update(self.custom_params_hash)
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }

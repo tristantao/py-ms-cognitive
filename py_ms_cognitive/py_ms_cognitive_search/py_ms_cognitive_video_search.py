@@ -27,8 +27,6 @@ class PyMsCognitiveVideoSearch(PyMsCognitiveSearch):
           'q' : self.query,
           'count' : limit, #currently 50 is max per search.
           'offset': self.current_offset,
-          #'mkt' : 'en-us', #optional
-          #'safesearch' : 'Moderate', #optional
         }
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }
         response = requests.get(self.QUERY_URL, params=payload, headers=headers)
