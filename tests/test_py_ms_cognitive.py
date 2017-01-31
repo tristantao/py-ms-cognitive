@@ -35,7 +35,6 @@ class TestPyMsCognitiveWebSearch(TestCase):
         result_one = web_bing.search(limit=50)
         self.assertTrue(len(result_one) == 50)
         self.assertTrue("python" in result_one[0].name.lower())
-        time.sleep(0.5)
 
     def test_search_all(self):
         web_bing = PyMsCognitiveWebSearch(SECRET_KEY, "Python Software Foundation")
