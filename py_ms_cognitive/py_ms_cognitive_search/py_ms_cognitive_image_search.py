@@ -15,20 +15,25 @@ class PyMsCognitiveImageSearch(PyMsCognitiveSearch):
 
     SEARCH_IMAGE_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/images/search'
 
-    def __init__(self, api_key, query, silent_fail=False, custom_params=''):
-        query_url = self.SEARCH_IMAGE_BASE + custom_params
-        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, silent_fail=silent_fail)
+    def __init__(self, api_key, query, custom_params='', silent_fail=False,):
+        query_url = self.SEARCH_IMAGE_BASE
+        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, custom_params, silent_fail=silent_fail)
 
     def _search(self, limit, format):
         '''
         Returns a list of result objects, with the url for the next page MsCognitive search url.
         '''
         limit = min(limit, self.MAX_SEARCH_PER_QUERY)
+
+        # query parameters
         payload = {
           'q' : self.query,
           'count' : limit, #currently 50 is max per search.
           'offset': self.current_offset,
         }
+        payload.update(self.CUSTOM_PARAMS) # image filters
+        print payload
+
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }
         if not self.silent_fail:
             QueryChecker.check_web_params(payload, headers)
@@ -37,7 +42,7 @@ class PyMsCognitiveImageSearch(PyMsCognitiveSearch):
         json_results = self.get_json_results(response)
 
         packaged_results = [ImageResult(single_result_json) for single_result_json in json_results["value"]]
-        self.current_offset += min(50, limit, len(packaged_results))
+        self.current_offset += min(50, limit)
         return packaged_results
 
 class ImageResult(object):

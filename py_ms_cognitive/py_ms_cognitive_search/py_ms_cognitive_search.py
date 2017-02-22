@@ -24,12 +24,13 @@ class PyMsCognitiveSearch(object):
     """
     Shell class for the individual searches
     """
-    def __init__(self, api_key, query, query_url, silent_fail=False):
+    def __init__(self, api_key, query, query_url, custom_params='', silent_fail=False):
         self.api_key = api_key
         self.silent_fail = silent_fail
         self.current_offset = 0
         self.query = query
         self.QUERY_URL = query_url
+        self.CUSTOM_PARAMS = custom_params
         self.MAX_SEARCH_PER_QUERY = 50
         self.most_recent_json = None
 
