@@ -82,19 +82,19 @@ You secan also run __*search_all*__ to keep searching until it fills your requir
 >>> from py_ms_cognitive import PyMsCognitiveWebSearch
 >>> search_term = "puppies"
 >>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term)
->>> result_list = bing_web.search_all(quota=130) # will return result 1 - 130 
+>>> result_list = search_service.search_all(quota=130) # will return result 1 - 130 
 # (around 130 results, sometimes more)
->>> result_list = bing_web.search_all(quota=130, format='json') #will return result 131 to 260 
+>>> result_list = search_service.search_all(quota=130, format='json') #will return result 131 to 260 
 # sometimes a bit different, but roughly the number. Read below for the details.
 ```
 Sometimes microsoft returns 36 results when you query for 30 (just an inexact number). This means py-ms-cognitive will truncate some results. Here's an example:
 
 ```
-result_list = bing_web.search_all(quota=80) 
+result_list = search_service.search_all(quota=80) 
 ```
 
 This will likely be forced to run twice, first time getting __*50*__ (the max) from Micorosoft, and perhaps second time returning __*33*__ for some reason. py-ms-cognitive will truncate and return 80. But it also received __*83*__ in combined results. That means the next time you run the command from the same instance:
-result_list = bing_web.search(limit=20),
+result_list = search_service.search(limit=20),
 It won't return result number __*80-100*__, but rather result number __*83 - 103*__. But you would have no way of knowing this.
 
 
@@ -107,7 +107,7 @@ Custom parameters can be added via the __*custom_params*__ parameter:
 >>> search_term = "xbox"
 >>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term, custom_params='&offset=10')
 # You can have multiple custom params, i.e. custom_params='offset=10&mkt=en-us&safesearch=Strict'
->>> result_list = bing_web.search(limit=50) #will return 10-60, since we asked for 50 with an offset of 10.
+>>> result_list = search_service.search(limit=50) #will return 10-60, since we asked for 50 with an offset of 10.
 ```
 *Note that offset (among other query parameters) are used internally, and your custom param will overwrite them*. This means in the above example, no matter how many times you call __*search()*__, it'll always return result # __*10-60*__, since it'll honor the offset request in __*custom_params*__.
 
