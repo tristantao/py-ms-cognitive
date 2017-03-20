@@ -17,6 +17,7 @@ class PyMsCognitiveWebSearch(PyMsCognitiveSearch):
         query_url = self.SEARCH_WEB_BASE
         self.custom_params_hash = dict(item.split("=") for item in custom_params.split("&")[1:])
         PyMsCognitiveSearch.__init__(self, api_key, query, query_url, silent_fail=silent_fail)
+        print(api_key)
 
     def _search(self, limit, format):
         '''

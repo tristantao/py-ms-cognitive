@@ -31,6 +31,7 @@ class PyMsCognitiveSearch(object):
         self.query = query
         self.QUERY_URL = query_url
         self.MAX_SEARCH_PER_QUERY = 50
+        self.MAX_SUGGESTIONS_PER_QUERY = 8
         self.most_recent_json = None
 
     def get_json_results(self, response):

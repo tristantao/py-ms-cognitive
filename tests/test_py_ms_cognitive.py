@@ -136,5 +136,6 @@ class TestPyMsCognitiveAutosuggestions(TestCase):
 
     def test_can_search(self):
         web_bing = PyMsCognitiveSuggestions(SECRET_KEY, "Python")
-        result_one = web_bing.search(limit=50)
-        print(result_one)
+        result_one = web_bing.search(limit=5) #currently, Bing returns up to 8 suggestions
+        self.assertTrue(len(result_one) == 5)
+        self.assertTrue("python" in result_one[0].query.lower())
