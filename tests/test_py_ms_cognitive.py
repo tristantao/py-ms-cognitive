@@ -6,6 +6,8 @@ from py_ms_cognitive import PyMsCognitiveWebSearch
 from py_ms_cognitive import PyMsCognitiveImageSearch
 from py_ms_cognitive import PyMsCognitiveVideoSearch
 from py_ms_cognitive import PyMsCognitiveNewsSearch
+from py_ms_cognitive import PyMsCognitiveSuggestions
+
 
 
 def grab_search_secret():
@@ -125,3 +127,15 @@ class TestPyMsCognitiveNewsSearch(TestCase):
         result_one = web_bing.search_all(quota=60)
         self.assertTrue(len(result_one) == 60)
         self.assertTrue("python" in result_one[0].name.lower())
+
+class TestPyMsCognitiveAutosuggestions(TestCase):
+
+    def tearDown(self):
+        '''To not overload API calls'''
+        time.sleep(0.75)
+
+    def test_can_search(self):
+        web_bing = PyMsCognitiveSuggestions(SECRET_KEY, "Python")
+        result_one = web_bing.search(limit=5) #currently, Bing returns up to 8 suggestions
+        self.assertTrue(len(result_one) == 5)
+        self.assertTrue("python" in result_one[0].query.lower())
