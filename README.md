@@ -101,15 +101,15 @@ It won't return result number __*80-100*__, but rather result number __*83 - 103
 __*search_all()*__ is available in all PyBing*Search classes.
 
 ## Custom parameters
-Custom parameters can be added via the __*custom_params*__ parameter: 
+Custom parameters can be added via the __*custom_params*__ parameter (note that this param has been updated from a *string* to a *hash*): 
 ```py
 >>> from py_ms_cognitive import PyMsCognitiveWebSearch
 >>> search_term = "xbox"
->>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term, custom_params='&offset=10')
-# You can have multiple custom params, i.e. custom_params='offset=10&mkt=en-us&safesearch=Strict'
->>> result_list = search_service.search(limit=50) #will return 10-60, since we asked for 50 with an offset of 10.
+>>> search_service = PyMsCognitiveWebSearch('API_KEY', search_term, custom_params={"mkt": "en-GB"})
+# You can have multiple custom params by including more params in the hash.
+>>> result_list = search_service.search(limit=50)
 ```
-*Note that offset (among other query parameters) are used internally, and your custom param will overwrite them*. This means in the above example, no matter how many times you call __*search()*__, it'll always return result # __*10-60*__, since it'll honor the offset request in __*custom_params*__.
+*Note that certain query parameters are used internally (such as offset), and your custom param will overwrite them*. This can lead to some unexpected behaviors. 
 
 ## silent_fail mode
 you can enable *__silent_fail__* (off by default) by:
