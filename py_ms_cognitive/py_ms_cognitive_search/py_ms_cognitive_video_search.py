@@ -15,9 +15,9 @@ class PyMsCognitiveVideoSearch(PyMsCognitiveSearch):
 
     SEARCH_VIDEO_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/videos/search'
 
-    def __init__(self, api_key, query, silent_fail=False, custom_params=''):
-        query_url = self.SEARCH_VIDEO_BASE + custom_params
-        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, silent_fail=silent_fail)
+    def __init__(self, api_key, query, custom_params={}, silent_fail=False):
+        query_url = self.SEARCH_VIDEO_BASE
+        PyMsCognitiveSearch.__init__(self, api_key, query, query_url, custom_params, silent_fail=silent_fail)
 
     def _search(self, limit, format):
         '''
@@ -29,11 +29,11 @@ class PyMsCognitiveVideoSearch(PyMsCognitiveSearch):
           'count' : limit, #currently 50 is max per search.
           'offset': self.current_offset,
         }
+        payload.update(self.CUSTOM_PARAMS)
+
         headers = { 'Ocp-Apim-Subscription-Key' : self.api_key }
         response = requests.get(self.QUERY_URL, params=payload, headers=headers)
-
         json_results = self.get_json_results(response)
-
         packaged_results = [VideoResult(single_result_json) for single_result_json in json_results["value"]]
         self.current_offset += min(50, limit, len(packaged_results))
         return packaged_results
