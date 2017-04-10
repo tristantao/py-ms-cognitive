@@ -23,11 +23,12 @@ class PyMsCognitiveSuggestions(PyMsCognitiveSearch):
         limit = min(limit, self.MAX_SEARCH_PER_QUERY)
         payload = {
             'q' : self.query,
-            'mkt': 'en-us',
+            'mkt': 'en-us', #default, but can be overwritten.
             'count' : limit,
             'offset' : self.current_offset
         }
-        payload.update(self.custom_params_hash)
+        payload.update(self.CUSTOM_PARAMS)
+
         headers = { 'Ocp-Apim-Subscription-Key': self.api_key }
         if not self.silent_fail:
             QueryChecker.check_web_params(payload, headers)
