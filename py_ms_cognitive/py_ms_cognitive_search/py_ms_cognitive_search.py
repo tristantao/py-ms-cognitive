@@ -39,6 +39,7 @@ class PyMsCognitiveSearch(object):
         '''
         Parses the request result and returns the JSON object. Handles all errors.
         '''
+        json_results = None # <-- b/c PEP & to prevent weak-warnings while linting
         try:
             # return the proper JSON object, or error code if request didn't go through.
             self.most_recent_json = response.json()
@@ -49,7 +50,7 @@ class PyMsCognitiveSearch(object):
                 message = json_results['message']
                 try:
                     # extract time out seconds from response
-                    timeout = int(re.search('in (.+?) seconds', message).group(1)) + 1
+                    timeout = int(re.search(r'in (.+?) seconds', message).group(1)) + 1 # <--explicit rawstring for py3 compatibility.
                     print ("CODE 429, sleeping for {timeout} seconds").format(timeout=str(timeout))
                     time.sleep(timeout)
                 except (AttributeError, ValueError) as e:
@@ -60,9 +61,9 @@ class PyMsCognitiveSearch(object):
                         time.sleep(5)
         except ValueError as vE:
             if not self.silent_fail:
-                raise PyMsCognitiveWebSearchException("Request returned with code %s, error msg: %s" % (r.status_code, r.text))
+                raise PyMsCognitiveWebSearchException("Request returned with code {}, error msg: {}".format(response.status_code, (response.text if response.text else "(no msg returned from server)")))
             else:
-                print ("[ERROR] Request returned with code %s, error msg: %s. \nContinuing in 5 seconds." % (r.status_code, r.text))
+                print ("[ERROR] Request returned with code {}, error msg: {}. \nContinuing in 5 seconds.".format(response.status_code, (response.text if response.text else "(no msg returned from server)")))
                 time.sleep(5)
         return json_results
 

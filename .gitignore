@@ -20,3 +20,6 @@ dist_backup
 #sensitive info in this driver
 driver.py
 secrets.cfg
+
+#Pycharm IDE Config Files
+.idea/
