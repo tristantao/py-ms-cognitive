@@ -24,13 +24,16 @@ class PyMsCognitiveSearch(object):
     """
     Shell class for the individual searches
     """
-    def __init__(self, api_key, query, query_url, custom_params={}, silent_fail=False):
+    def __init__(self, api_key, query, query_url, custom_params=None, silent_fail=False):
         self.api_key = api_key
         self.silent_fail = silent_fail
         self.current_offset = 0
         self.query = query
         self.QUERY_URL = query_url
-        self.CUSTOM_PARAMS = custom_params
+        if custom_params is None: # <-- declaring mutable objects as default-function-args can become problematic.
+            self.CUSTOM_PARAMS = {}
+        else:
+            self.CUSTOM_PARAMS = custom_params
         self.MAX_SEARCH_PER_QUERY = 50
         self.MAX_SUGGESTIONS_PER_QUERY = 8
         self.most_recent_json = None
@@ -121,7 +124,11 @@ class QueryChecker():
             if query_dict['safeSearch'] not in ('Off', 'Moderate', 'Strict'):
                 raise ValueError('safeSearch setting must be Off, Moderate, or Strict. Assume Case-Sensitive.')
             if 'X-Search-ClientIP' in query_dict.keys():
-                raw_input('You have specified both an X-Search-ClientIP header and safesearch setting\nplease note: header takes precedence')
+                from sys import version_info # <-- frankly I don't know why you're not supposed to use plain `input()` in python2 but...smart ppl told me so?
+                if version_info[0] <= 2:
+                    raw_input('You have specified both an X-Search-ClientIP header and safesearch setting\nplease note: header takes precedence')
+                else: input('You have specified both an X-Search-ClientIP header and safesearch setting\nplease note: header takes precedence')
+                del version_info
         if 'setLang' in query_dict.keys():
             if header_dict['Accept-Language']:
                 raise AssertionError('Attempt to use both language header and query param.')
