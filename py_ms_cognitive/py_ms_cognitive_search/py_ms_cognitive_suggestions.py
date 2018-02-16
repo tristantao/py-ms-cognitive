@@ -10,7 +10,7 @@ from .py_ms_cognitive_search import QueryChecker
 
 class PyMsCognitiveSuggestions(PyMsCognitiveSearch):
 
-    COGNITIVE_SUGGESTIONS_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/suggestions'
+    COGNITIVE_SUGGESTIONS_BASE = 'https://api.cognitive.microsoft.com/bing/{}/suggestions'.format(PyMsCognitiveSearch.API_VERSION_STRING)
 
     def __init__(self, api_key, query, custom_params={}, silent_fail=False):
         query_url = self.COGNITIVE_SUGGESTIONS_BASE

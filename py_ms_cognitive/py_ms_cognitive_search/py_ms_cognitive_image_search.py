@@ -13,7 +13,7 @@ class PyMsCognitiveImageException(Exception):
 
 class PyMsCognitiveImageSearch(PyMsCognitiveSearch):
 
-    SEARCH_IMAGE_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/images/search'
+    SEARCH_IMAGE_BASE = 'https://api.cognitive.microsoft.com/bing/{}/images/search'.format(PyMsCognitiveSearch.API_VERSION_STRING)
 
     def __init__(self, api_key, query, custom_params={}, silent_fail=False,):
         query_url = self.SEARCH_IMAGE_BASE
