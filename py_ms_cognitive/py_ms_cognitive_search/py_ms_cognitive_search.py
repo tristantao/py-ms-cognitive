@@ -21,6 +21,9 @@ class PyMsCognitiveWebSearchException(Exception):
 
 
 class PyMsCognitiveSearch(object):
+
+    API_VERSION_STRING = 'v7.0'
+
     """
     Shell class for the individual searches
     """

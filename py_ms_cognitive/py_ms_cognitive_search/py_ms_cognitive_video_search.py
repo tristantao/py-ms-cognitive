@@ -13,7 +13,7 @@ class PyMsCognitiveVideoException(Exception):
 
 class PyMsCognitiveVideoSearch(PyMsCognitiveSearch):
 
-    SEARCH_VIDEO_BASE = 'https://api.cognitive.microsoft.com/bing/v5.0/videos/search'
+    SEARCH_VIDEO_BASE = 'https://api.cognitive.microsoft.com/bing/{}/videos/search'.format(PyMsCognitiveSearch.API_VERSION_STRING)
 
     def __init__(self, api_key, query, custom_params={}, silent_fail=False):
         query_url = self.SEARCH_VIDEO_BASE
